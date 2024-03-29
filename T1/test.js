@@ -1,4 +1,4 @@
-import assert from "assert";
+import { _bocchiShutUp as bocchiShutUp} from "./t1_cpp/a.out.js";
 
 // Choose proper "import" depending on your PL.
 // import { bocchiShutUp } from "./t1-as/build/release.js";
