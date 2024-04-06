@@ -30,15 +30,20 @@ do {
     if (operator == 1) {
         timeStamp = performance.now() * 1000;
         operation = op1(1, status);
+        console.log("1:" + operation);
         op1Time += performance.now() * 1000 - timeStamp;
         operationSequence.push(operation);
+
         boardReturn = board(1, operationSequence, operationSequence.length);
+        console.log(boardReturn);
     } else {
         timeStamp = performance.now() * 1000;
         operation = op2(2, status);
+        console.log("2:" + operation);
         op2Time += performance.now() * 1000 - timeStamp;
         operationSequence.push(operation);
         boardReturn = board(2, operationSequence, operationSequence.length);
+        console.log(boardReturn);
     }
     if (boardReturn[14] == 1) {
         operator = 1;
@@ -62,6 +67,7 @@ isEnded = false;
 
 do {
     if (operator == 1) {
+        console.log("test6");
         timeStamp = performance.now() * 1000;
         operation = op1(1, status);
         op1Time += performance.now() * 1000 - timeStamp;

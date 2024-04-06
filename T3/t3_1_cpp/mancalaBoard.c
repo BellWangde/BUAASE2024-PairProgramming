@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include "stdio.h"
+//#include "stdio.h"
 #include <emscripten/emscripten.h>
 
 struct Board {
@@ -123,7 +123,7 @@ int * EMSCRIPTEN_KEEPALIVE mancalaBoard(int flag, int seq[], int size) {
 
 //int main() {
 //    int flag = 1;
-//    int seq[] = {23};
+//    int seq[] = {13};
 //    int size = 1;
 //    int *ptr = mancalaBoard(flag, seq, size);
 //    for (int i = 0; i < 15; ++i) {

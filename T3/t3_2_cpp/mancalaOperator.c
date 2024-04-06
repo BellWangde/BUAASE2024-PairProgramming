@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
+//#include <stdio.h>
+//#include <time.h>
 #include <emscripten/emscripten.h>
 
 struct Board {
@@ -187,7 +187,7 @@ int EMSCRIPTEN_KEEPALIVE mancalaOperator(int flag, int status[]) {
     struct Board *board = (struct Board *)malloc(sizeof(struct Board));
     initBoard(board, flag);
     int maxStep = 10;
-    return decide(board, flag, maxStep);
+    return decide(board, flag, maxStep) + 10 * flag;
 }
 
 //int main() {
