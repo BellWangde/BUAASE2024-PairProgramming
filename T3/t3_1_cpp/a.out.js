@@ -1,7 +1,7 @@
 import fs from "fs"
 
 export function mancalaBoard(n, arr, length) {
-  const binary = fs.readFileSync('./t3_1_cpp/a.out.wasm');
+  const binary = fs.readFileSync('a.out.wasm');
 
   var HEAPU8 = new Uint8Array(4294967296);
   var _emscripten_resize_heap = (requestedSize) => {
@@ -30,5 +30,15 @@ export function mancalaBoard(n, arr, length) {
   for (let i = 0; i < length; ++ i) {
     heap[start + i] = arr[i];
   }
-  return instance.exports.mancalaBoard(n, ptr, length);
+  const resultPtr = instance.exports.mancalaBoard(n, ptr, length);
+
+  const resultArray = [];
+  const resultStart = resultPtr >> 2;
+  for (let i = 0; i < 15; ++i) {
+    resultArray.push(heap[resultStart + i]);
+  }
+
+  return resultArray;
 }
+
+console.log(mancalaBoard(1, [23], 1))

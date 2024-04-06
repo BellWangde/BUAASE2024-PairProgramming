@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include "stdio.h"
 #include <emscripten/emscripten.h>
 
 struct Board {
@@ -94,6 +95,7 @@ int *getHole(struct Board *board) {
     return hole;
 }
 
+// EMSCRIPTEN_KEEPALIVE
 int * EMSCRIPTEN_KEEPALIVE mancalaBoard(int flag, int seq[], int size) {
     struct Board board;
     initBoard(&board, flag);
@@ -103,7 +105,8 @@ int * EMSCRIPTEN_KEEPALIVE mancalaBoard(int flag, int seq[], int size) {
         int pos = seq[i] % 10;
         if (i == size - 1) {
             if (player != getCurPlayer(&board)) {
-                result[14] = scoreDifference(&board);
+                memcpy(result, getHole(&board), 14 * sizeof(int));
+                result[14] = 200 + scoreDifference(&board);
                 return result;
             }
         }
@@ -117,3 +120,13 @@ int * EMSCRIPTEN_KEEPALIVE mancalaBoard(int flag, int seq[], int size) {
     }
     return result;
 }
+
+//int main() {
+//    int flag = 1;
+//    int seq[] = {23};
+//    int size = 1;
+//    int *ptr = mancalaBoard(flag, seq, size);
+//    for (int i = 0; i < 15; ++i) {
+//        printf("%d ", ptr[i]);
+//    }
+//}
