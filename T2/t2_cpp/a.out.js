@@ -8,7 +8,7 @@ export function mancalaResult(n, arr, length) {
     var oldSize = HEAPU8.length;
     // With CAN_ADDRESS_2GB or MEMORY64, pointers are already unsigned.
     requestedSize >>>= 0;
-    abortOnCannotGrowMemory(requestedSize);
+    // abortOnCannotGrowMemory(requestedSize);
   };
 
   var wasmImports = {

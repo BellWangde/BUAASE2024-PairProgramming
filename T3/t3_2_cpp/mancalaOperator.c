@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <emscripten/emscripten.h>
 
 struct Board {
     int hole[14];
@@ -182,20 +183,20 @@ int decide(struct Board *board, int flag, int maxStep) {
     return bestMove;
 }
 
-int mancalaOperator(int flag, int status[]) {
+int EMSCRIPTEN_KEEPALIVE mancalaOperator(int flag, int status[]) {
     struct Board *board = (struct Board *)malloc(sizeof(struct Board));
     initBoard(board, flag);
     int maxStep = 10;
     return decide(board, flag, maxStep);
 }
 
-int main() {
-    clock_t start = clock();
-    int flag = 1;
-    int status[] = {4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0};
-    int res = mancalaOperator(flag, status);
-    clock_t end = clock();
-    double time = ((double) end - (double) start) / CLOCKS_PER_SEC;
-    printf("%d, %f", res, time);
-    return 0;
-}
+//int main() {
+//    clock_t start = clock();
+//    int flag = 1;
+//    int status[] = {4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0};
+//    int res = mancalaOperator(flag, status);
+//    clock_t end = clock();
+//    double time = ((double) end - (double) start) / CLOCKS_PER_SEC;
+//    printf("%d, %f", res, time);
+//    return 0;
+//}
