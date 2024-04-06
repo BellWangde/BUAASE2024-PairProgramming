@@ -6,7 +6,7 @@ import { mancalaOperator as op1 } from "./t3_2_cpp/a.out.js";
 // [Write your own "import" for other PLs.]
 
 // Choose proper "import" depending on your PL.
-import { mancalaOperator as op2 } from "./t3_2_cpp/a.out.js";
+import { mancala_operator as op2 } from "./t3_2_rust_rival/t3_2_rust.js";
 // import { mancala_operator as op2 } from "./t3_2_rust_rival/pkg/t3_2_rust.js"
 // [Write your own "import" for other PLs.]
 
@@ -30,20 +30,15 @@ do {
     if (operator == 1) {
         timeStamp = performance.now() * 1000;
         operation = op1(1, status);
-        console.log("1:" + operation);
         op1Time += performance.now() * 1000 - timeStamp;
         operationSequence.push(operation);
-
         boardReturn = board(1, operationSequence, operationSequence.length);
-        console.log(boardReturn);
     } else {
         timeStamp = performance.now() * 1000;
         operation = op2(2, status);
-        console.log("2:" + operation);
         op2Time += performance.now() * 1000 - timeStamp;
         operationSequence.push(operation);
         boardReturn = board(2, operationSequence, operationSequence.length);
-        console.log(boardReturn);
     }
     if (boardReturn[14] == 1) {
         operator = 1;
@@ -55,8 +50,11 @@ do {
         isEnded = true;
         op1Result += boardReturn[14] - 200;
         op2Result -= boardReturn[14] - 200;
+        console.log(operationSequence);
     }
 } while (!isEnded);
+
+// console.log(operationSequence);
 
 // Now change to start from op2.
 operator = 2;
@@ -67,7 +65,6 @@ isEnded = false;
 
 do {
     if (operator == 1) {
-        console.log("test6");
         timeStamp = performance.now() * 1000;
         operation = op1(1, status);
         op1Time += performance.now() * 1000 - timeStamp;
@@ -90,9 +87,12 @@ do {
         isEnded = true;
         op1Result += boardReturn[14] - 200;
         op2Result -= boardReturn[14] - 200;
+        console.log(operationSequence);
     }
 } while (!isEnded);
- 
+
+// console.log(operationSequence);
+
 op1Time = op1Time / 1000;
 op2Time = op2Time / 1000;
 

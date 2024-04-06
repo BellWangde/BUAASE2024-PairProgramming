@@ -30,7 +30,7 @@ int sow(struct Board *board, int player, int pos) {
         return 0;
     }
 
-    int start = 6 * (player - 1) + pos - 1;
+    int start = 7 * player + pos - 8;
     int cnt = board->hole[start];
     board->hole[start] = 0;
     int now = start;
@@ -43,14 +43,14 @@ int sow(struct Board *board, int player, int pos) {
         ++board->hole[now];
     }
 
-    if (player == 1 && board->hole[now] == 1 && 0 <= now && now <= 5) {
-        board->hole[6] += (board->hole[now] + board->hole[13 - now]);
+    if (player == 1 && board->hole[now] == 1 && 0 <= now && now <= 5 && board->hole[12 - now] > 0) {
+        board->hole[6] += (board->hole[now] + board->hole[12 - now]);
         board->hole[now] = 0;
-        board->hole[13 - now] = 0;
-    } else if ((player == 2 && board->hole[now] == 1) && (7 <= now && now <= 12)) {
-        board->hole[13] += (board->hole[now] + board->hole[13 - now]);
+        board->hole[12 - now] = 0;
+    } else if ((player == 2 && board->hole[now] == 1) && (7 <= now && now <= 12) && board->hole[12 - now] > 0) {
+        board->hole[13] += (board->hole[now] + board->hole[12 - now]);
         board->hole[now] = 0;
-        board->hole[13 - now] = 0;
+        board->hole[12 - now] = 0;
     }
 
     if (!((player == 1 && now == 6) || (player == 2 && now == 13))) {
@@ -60,13 +60,17 @@ int sow(struct Board *board, int player, int pos) {
     if (sum(board, 1) == 0) {
         board->hole[13] += sum(board, 2);
         for (int i = 0; i < 13; ++i) {
-            board->hole[i] = 0;
+            if (i != 6) {
+                board->hole[i] = 0;
+            }
         }
         board->stop = 1;
     } else if (sum(board, 2) == 0) {
         board->hole[6] += sum(board, 1);
         for (int i = 0; i < 13; ++i) {
-            board->hole[i] = 0;
+            if (i != 6) {
+                board->hole[i] = 0;
+            }
         }
         board->stop = 1;
     }
@@ -81,8 +85,12 @@ int score(struct Board *board) {
     return board->hole[7 * board->first - 1];
 }
 
-int scoreDifference(struct Board *board) {
-    return board->hole[7 * board->first - 1] - board->hole[20 - 7 * board->first];
+int scoreDifference(struct Board *board, int flag) {
+    if (flag) {
+        return board->hole[7 * board->first - 1] - board->hole[20 - 7 * board->first];
+    } else {
+        return board->hole[6] - board->hole[13]; // 玩家1的净胜
+    }
 }
 
 int getCurPlayer(struct Board *board) {
@@ -98,15 +106,15 @@ int *getHole(struct Board *board) {
 // EMSCRIPTEN_KEEPALIVE
 int * EMSCRIPTEN_KEEPALIVE mancalaBoard(int flag, int seq[], int size) {
     struct Board board;
-    initBoard(&board, flag);
+    initBoard(&board, seq[0] / 10);
     int *result = (int *)malloc(15 * sizeof(int));
     for (int i = 0; i < size; ++i) {
         int player = seq[i] / 10;
         int pos = seq[i] % 10;
         if (i == size - 1) {
-            if (player != getCurPlayer(&board)) {
+            if (player != getCurPlayer(&board) || player != flag) {
                 memcpy(result, getHole(&board), 14 * sizeof(int));
-                result[14] = 200 + scoreDifference(&board);
+                result[14] = 200 + scoreDifference(&board,0);
                 return result;
             }
         }
@@ -114,7 +122,7 @@ int * EMSCRIPTEN_KEEPALIVE mancalaBoard(int flag, int seq[], int size) {
     }
     memcpy(result, getHole(&board), 14 * sizeof(int));
     if (isStop(&board)) {
-        result[14] = 200 + scoreDifference(&board);
+        result[14] = 200 + scoreDifference(&board, 0);
     } else {
         result[14] = getCurPlayer(&board);
     }

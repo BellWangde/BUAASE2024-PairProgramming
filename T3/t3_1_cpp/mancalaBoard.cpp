@@ -37,7 +37,7 @@ bool Board::sow(int player, int pos) {
         return false;
     }
 
-    int start = 6 * (player - 1) + pos - 1;
+    int start = 7 * player + pos - 8;
     int cnt = hole[start];
     hole[start] = 0;
     int now = start;

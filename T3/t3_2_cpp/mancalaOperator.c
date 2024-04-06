@@ -1,6 +1,7 @@
 #include <stdlib.h>
 //#include <stdio.h>
 //#include <time.h>
+#include <string.h>
 #include <emscripten/emscripten.h>
 
 struct Board {
@@ -19,10 +20,10 @@ int sum(struct Board *board, int player) {
     }
 }
 
-void initBoard(struct Board *board, int player) {
-    int hole_init[14] = {4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0};
+void initBoard(struct Board *board, int player, int status[]) {
+    // int hole_init[14] = {4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0};
     for (int i = 0; i < 14; ++i) {
-        board->hole[i] = hole_init[i];
+        board->hole[i] = status[i];
     }
     board->first = player;
     board->curPlayer = player;
@@ -41,7 +42,7 @@ void copyBoard(struct Board *dest, struct Board *src) {
 }
 
 int query(struct Board *board, int player, int pos) {
-    int start = 6 * (player - 1) + pos - 1;
+    int start = 7 * player + pos - 8;
     return board->hole[start] != 0;
 }
 
@@ -50,7 +51,7 @@ int sow(struct Board *board, int player, int pos) {
         return 0;
     }
     ++board->step;
-    int start = 6 * (player - 1) + pos - 1;
+    int start = 7 * player + pos - 8;
     int cnt = board->hole[start];
     board->hole[start] = 0;
     int now = start;
@@ -63,14 +64,14 @@ int sow(struct Board *board, int player, int pos) {
         ++board->hole[now];
     }
 
-    if (player == 1 && board->hole[now] == 1 && 0 <= now && now <= 5) {
-        board->hole[6] += (board->hole[now] + board->hole[13 - now]);
+    if (player == 1 && board->hole[now] == 1 && 0 <= now && now <= 5 && board->hole[12 - now] > 0) {
+        board->hole[6] += (board->hole[now] + board->hole[12 - now]);
         board->hole[now] = 0;
-        board->hole[13 - now] = 0;
-    } else if ((player == 2 && board->hole[now] == 1) && (7 <= now && now <= 12)) {
-        board->hole[13] += (board->hole[now] + board->hole[13 - now]);
+        board->hole[12 - now] = 0;
+    } else if ((player == 2 && board->hole[now] == 1) && (7 <= now && now <= 12) && board->hole[12 - now] > 0) {
+        board->hole[13] += (board->hole[now] + board->hole[12 - now]);
         board->hole[now] = 0;
-        board->hole[13 - now] = 0;
+        board->hole[12 - now] = 0;
     }
 
     if (!((player == 1 && now == 7) || (player == 2 && now == 13))) {
@@ -80,13 +81,17 @@ int sow(struct Board *board, int player, int pos) {
     if (sum(board, 1) == 0) {
         board->hole[13] += sum(board, 2);
         for (int i = 0; i < 13; ++i) {
-            board->hole[i] = 0;
+            if (i != 6) {
+                board->hole[i] = 0;
+            }
         }
         board->stop = 1;
     } else if (sum(board, 2) == 0) {
         board->hole[6] += sum(board, 1);
         for (int i = 0; i < 13; ++i) {
-            board->hole[i] = 0;
+            if (i != 6) {
+                board->hole[i] = 0;
+            }
         }
         board->stop = 1;
     }
@@ -101,8 +106,13 @@ int score(struct Board *board) {
     return board->hole[7 * board->first - 1];
 }
 
-int scoreDifference(struct Board *board) {
-    return board->hole[7 * board->first - 1] - board->hole[20 - 7 * board->first];
+int scoreDifference(struct Board *board, int flag) {
+    if (flag) {
+        return board->hole[7 * board->first - 1] - board->hole[20 - 7 * board->first];
+    } else {
+        return board->hole[6] - board->hole[13];
+    }
+
 }
 
 int getCurPlayer(struct Board *board) {
@@ -161,7 +171,7 @@ int decide(struct Board *board, int flag, int maxStep) {
         struct Board *nowBoard = p.first;
         int move = p.second;
         if (nowBoard->step == maxStep || isStop(nowBoard)) {
-            int diff = scoreDifference(nowBoard) * (flag * -2 + 3);
+            int diff = scoreDifference(nowBoard, 0) * (flag * -2 + 3);
             if (diff > maxScoreDifference) {
                 maxScoreDifference = diff;
                 bestMove = move;
@@ -185,15 +195,15 @@ int decide(struct Board *board, int flag, int maxStep) {
 
 int EMSCRIPTEN_KEEPALIVE mancalaOperator(int flag, int status[]) {
     struct Board *board = (struct Board *)malloc(sizeof(struct Board));
-    initBoard(board, flag);
-    int maxStep = 10;
+    initBoard(board, flag, status);
+    int maxStep = 3;
     return decide(board, flag, maxStep) + 10 * flag;
 }
 
 //int main() {
 //    clock_t start = clock();
 //    int flag = 1;
-//    int status[] = {4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0};
+//    int status[] = {4,4,4,4,0,5,1,0,6,5,5,5,5,0,1};
 //    int res = mancalaOperator(flag, status);
 //    clock_t end = clock();
 //    double time = ((double) end - (double) start) / CLOCKS_PER_SEC;

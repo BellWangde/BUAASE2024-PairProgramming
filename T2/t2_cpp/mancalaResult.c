@@ -37,7 +37,7 @@ bool sow(Board *board, int player, int pos) {
     if (player != board->curPlayer) {
         return false;
     }
-    int start = 6 * (player - 1) + pos - 1;
+    int start = 7 * player + pos - 8;
     int cnt = board->hole[start];
     board->hole[start] = 0;
     int now = start;
@@ -51,14 +51,14 @@ bool sow(Board *board, int player, int pos) {
         ++board->hole[now];
     }
 
-    if (player == 1 && board->hole[now] == 1 && 0 <= now && now <= 5) {
-        board->hole[6] += (board->hole[now] + board->hole[13 - now]);
+    if (player == 1 && board->hole[now] == 1 && 0 <= now && now <= 5 && board->hole[12 - now] > 0) {
+        board->hole[6] += (board->hole[now] + board->hole[12 - now]);
         board->hole[now] = 0;
-        board->hole[13 - now] = 0;
-    } else if ((player == 2 && board->hole[now] == 1) && (7 <= now && now <= 12)) {
-        board->hole[13] += (board->hole[now] + board->hole[13 - now]);
+        board->hole[12 - now] = 0;
+    } else if ((player == 2 && board->hole[now] == 1) && (7 <= now && now <= 12) && board->hole[12 - now] > 0) {
+        board->hole[13] += (board->hole[now] + board->hole[12 - now]);
         board->hole[now] = 0;
-        board->hole[13 - now] = 0;
+        board->hole[12 - now] = 0;
     }
 
     if (!((player == 1 && now == 6) || (player == 2 && now == 13))) {
@@ -67,16 +67,20 @@ bool sow(Board *board, int player, int pos) {
 
     if (sum(board->hole, 1) == 0) {
         board->hole[13] += sum(board->hole, 2);
-        for (i = 0; i < 13; ++i) {
-            board->hole[i] = 0;
+        for (int i = 0; i < 13; ++i) {
+            if (i != 6) {
+                board->hole[i] = 0;
+            }
         }
-        board->stop = true;
+        board->stop = 1;
     } else if (sum(board->hole, 2) == 0) {
         board->hole[6] += sum(board->hole, 1);
-        for (i = 0; i < 13; ++i) {
-            board->hole[i] = 0;
+        for (int i = 0; i < 13; ++i) {
+            if (i != 6) {
+                board->hole[i] = 0;
+            }
         }
-        board->stop = true;
+        board->stop = 1;
     }
     return true;
 }
