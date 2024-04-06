@@ -126,12 +126,19 @@ int mancalaResult(int flag, int seq[], int size) {
 
 int *mancalaBoard(int flag, int seq[], int size) {
     auto board = new Board(flag);
+    int *result = new int [15];
     for (int i = 0; i < size; ++i) {
         int player = seq[i] / 10;
         int sow = seq[i] % 10;
+        if (i == size - 1) {
+            if (player != board->getCurPlayer()) {
+                result[14] = board->scoreDifference();
+                delete board;
+                return result;
+            }
+        }
         board->sow(player, sow);
     }
-    int *result = new int [15];
     memcpy(result, board->getHole(), 14 * sizeof(int));
     if (board->isStop()) {
         result[14] = 200 + board->scoreDifference();
@@ -140,14 +147,4 @@ int *mancalaBoard(int flag, int seq[], int size) {
     }
     delete board;
     return result;
-}
-
-int main() {
-    int flag = ;
-    int seq[] = ;
-    int size = ;
-    int *result = mancalaBoard(flag, seq, size);
-    for(int i = 0; i < 15; ++i) {
-        printf("%d", result[i]);
-    }
 }
