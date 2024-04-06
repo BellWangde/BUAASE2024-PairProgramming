@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <emscripten/emscripten.h>
 
 class Board {
 private:
@@ -99,7 +99,9 @@ int *Board::getHole() {
     return hole;
 }
 
-int mancalaResult(int flag, int seq[], int size) {
+
+int EMSCRIPTEN_KEEPALIVE
+mancalaResult(int flag, int seq[], int size) {
     auto *board = new Board(flag);
     for (int i = 0; i < size; ++i) {
         int player = seq[i] / 10;
@@ -121,11 +123,11 @@ int mancalaResult(int flag, int seq[], int size) {
     }
 }
 
-int main() {
-    int aa[2] = {11, 12};
-    int bb[1] = {14};
-    int a = mancalaResult(1, aa, 2);
-    int b = mancalaResult(1, bb ,1);
-    printf("%d %d", a, b);
-    return 0;
-}
+//int main() {
+//    int aa[2] = {11, 12};
+//    int bb[1] = {14};
+//    int a = mancalaResult(1, aa, 2);
+//    int b = mancalaResult(1, bb ,1);
+//    printf("%d %d", a, b);
+//    return 0;
+//}

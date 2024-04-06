@@ -1,12 +1,8 @@
-#include <cstdio>
 #include <emscripten/emscripten.h>
-
-using namespace std;
 
 extern "C"
 {
-    int EMSCRIPTEN_KEEPALIVE
-    bocchiShutUp(int flag, int seq[], int size) {
+    int EMSCRIPTEN_KEEPALIVE bocchiShutUp(int flag, int *seq, int size) {
         int cnt[10] = {0};
         int maxx = 0, num = 0, count = 0;
         if (flag == 1) {
@@ -52,11 +48,4 @@ extern "C"
         }
         return 10;
     }
-}
-
-int main() {
-    int a[1] = {11};
-    printf("%d\n", bocchiShutUp(1, a, 1));
-    printf("Hello world! BUAA\n");
-    return 0;
 }
