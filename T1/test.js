@@ -1,9 +1,9 @@
 import assert from "assert"
-import { bocchiShutUp } from './t1_cpp/a.out.js';
+import { bocchiShutUp } from './t1-c/a.out.js';
 //
-// let mod = require("./t1_cpp/a.out.js")
+// let mod = require("./t1-c/a.out.js")
 // let bocchiShutUp = mod.cwrap("bocchiShutUp", "number", ["number", "array", "number"])
-// import { cwrap } from "./t1_cpp/a.out.js"
+// import { cwrap } from "./t1-c/a.out.js"
 
 // var bocchiShutUp = Module.cwrap("bocchiShutUp", "number", ["number", "array", "number"])
 // console.log(bocchiShutUp(1,1,6));

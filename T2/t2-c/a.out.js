@@ -1,7 +1,7 @@
 import fs from "fs"
 
 export function mancalaResult(n, arr, length) {
-  const binary = fs.readFileSync('./t2_cpp/a.out.wasm');
+  const binary = fs.readFileSync('./t2-c/a.out.wasm');
 
   var HEAPU8 = new Uint8Array(4294967296);
   var _emscripten_resize_heap = (requestedSize) => {

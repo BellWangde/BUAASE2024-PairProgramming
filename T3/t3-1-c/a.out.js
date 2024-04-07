@@ -1,14 +1,14 @@
 import fs from "fs"
 
-export function mancalaOperator(n, arr) {
-  const binary = fs.readFileSync('./t3_2_cpp/a.out.wasm');
+export function mancalaBoard(n, arr, length) {
+  const binary = fs.readFileSync('./t3-1-c/a.out.wasm');
 
   var HEAPU8 = new Uint8Array(4294967296);
   var _emscripten_resize_heap = (requestedSize) => {
     var oldSize = HEAPU8.length;
     // With CAN_ADDRESS_2GB or MEMORY64, pointers are already unsigned.
     requestedSize >>>= 0;
-    // abortOnCannotGrowMemory(requestedSize);
+    abortOnCannotGrowMemory(requestedSize);
   };
 
   var wasmImports = {
@@ -24,13 +24,20 @@ export function mancalaOperator(n, arr) {
   const instance = new WebAssembly.Instance(module, info);
 
   const memory = instance.exports.memory;
-  const ptr = instance.exports.stackAlloc(14 * 4);
+  const ptr = instance.exports.stackAlloc(length * 4);
   const start = ptr >> 2;
   const heap = new Int32Array(memory.buffer);
-  for (let i = 0; i < 14; ++ i) {
+  for (let i = 0; i < length; ++ i) {
     heap[start + i] = arr[i];
   }
-  return instance.exports.mancalaOperator(n, ptr);
-}
+  const resultPtr = instance.exports.mancalaBoard(n, ptr, length);
 
-// console.log(mancalaOperator(1, [4,4,4,4,0,5,1,0,6,5,5,5,5,0,1]));
+  const resultArray = [];
+  const resultStart = resultPtr >> 2;
+  for (let i = 0; i < 15; ++i) {
+    resultArray.push(heap[resultStart + i]);
+  }
+
+  return resultArray;
+}
+// console.log(mancalaBoard(1, [15, 21], 2))

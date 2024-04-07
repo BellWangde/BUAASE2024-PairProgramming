@@ -1,8 +1,8 @@
 import assert from "assert";
 
 // Choose proper "import" depending on your PL.
-import { mancalaOperator as op1 } from "./t3_2_cpp/a.out.js";
-// import { mancala_operator as op1 } from "./t3_2_rust/pkg/t3_2_rust.js"
+// import { mancalaOperator as op1 } from "./t3-2-c/a.out.js";
+ import { mancala_operator as op1 } from "./t3_2_rust_rival/t3_2_rust.js"
 // [Write your own "import" for other PLs.]
 
 // Choose proper "import" depending on your PL.
@@ -11,7 +11,7 @@ import { mancala_operator as op2 } from "./t3_2_rust_rival/t3_2_rust.js";
 // [Write your own "import" for other PLs.]
 
 // Choose proper "import" depending on your PL.
-import { mancalaBoard as board } from "./t3_1_cpp/a.out.js";
+import { mancalaBoard as board } from "./t3-1-c/a.out.js";
 // import { mancala_board as board } from "./t3_1_rust/pkg/t3_1_rust.js"
 // [Write your own "import" for other PLs.]
 
@@ -50,8 +50,9 @@ do {
         isEnded = true;
         op1Result += boardReturn[14] - 200;
         op2Result -= boardReturn[14] - 200;
-        console.log(operationSequence);
+        // console.log(operationSequence);
     }
+    // console.log(operation);
 } while (!isEnded);
 
 // console.log(operationSequence);
@@ -87,7 +88,7 @@ do {
         isEnded = true;
         op1Result += boardReturn[14] - 200;
         op2Result -= boardReturn[14] - 200;
-        console.log(operationSequence);
+        // console.log(operationSequence);
     }
 } while (!isEnded);
 
