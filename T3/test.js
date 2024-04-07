@@ -1,12 +1,13 @@
 import assert from "assert";
 
 // Choose proper "import" depending on your PL.
-// import { mancalaOperator as op1 } from "./t3-2-c/a.out.js";
- import { mancala_operator as op1 } from "./t3_2_rust_rival/t3_2_rust.js"
+import { mancalaOperator as op1 } from "./t3-2-c/a.out.js";
+// import { mancala_operator as op1 } from "./t3_2_rust_rival/t3_2_rust.js"
 // [Write your own "import" for other PLs.]
 
 // Choose proper "import" depending on your PL.
 import { mancala_operator as op2 } from "./t3_2_rust_rival/t3_2_rust.js";
+// import { mancalaOperator as op2 } from "./t3-2-c-rival2/a.out.js";
 // import { mancala_operator as op2 } from "./t3_2_rust_rival/pkg/t3_2_rust.js"
 // [Write your own "import" for other PLs.]
 

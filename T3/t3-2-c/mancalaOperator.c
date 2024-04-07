@@ -196,7 +196,7 @@ int decide(struct Board *board, int flag, int maxStep) {
 int EMSCRIPTEN_KEEPALIVE mancalaOperator(int flag, int status[]) {
     struct Board *board = (struct Board *)malloc(sizeof(struct Board));
     initBoard(board, flag, status);
-    int maxStep = 3;
+    int maxStep = 9;
     return decide(board, flag, maxStep) + 10 * flag;
 }
 
